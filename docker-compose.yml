@@ -1,0 +1,16 @@
+version: '3.8'
+name: "discord"
+services:
+  clone:
+    image: vishnu0609/discord:latest
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_bWFzc2l2ZS1za3Vuay0zNi5jbGVyay5hY2NvdW50cy5kZXYk
+      CLERK_SECRET_KEY: sk_test_znLZtaTCQBiKcS5H1aYjVgsGndYwJYyjrwr2IpZMX8
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL: /sign-in
+      NEXT_PUBLIC_CLERK_SIGN_UP_URL: /sign-up
+      SUPABASE_URL: https://mvkkathcqjkyomxgjrna.supabase.co
+      SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12a2thdGhjcWpreW9teGdqcm5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY1NzY1NzYsImV4cCI6MjAzMjE1MjU3Nn0.AaSTINe04OsMBBx8p4WGtt5me_NZXB5nW3gP5GIgCG8
+      DATABASE_URL: postgresql://postgres.mvkkathcqjkyomxgjrna:Sagar_300804@aws-0-ap-south-1.pooler.supabase.com:5432/postgres
+      UPLOADTHING_SECRET: sk_live_e8c33544a332c5898becb824e69e34a70f4f9b000f80e4ecfb966ddc7cbcd22c
