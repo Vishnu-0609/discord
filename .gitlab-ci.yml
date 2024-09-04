@@ -1,39 +1,88 @@
+# image: docker:latest
+
+# services:
+#   - name: docker:dind
+#     command: ["--host=unix///var/run/docker.sock"]
+
+# stages:
+#   - build
+#   - test
+#   - release
+#   - deploy
+
+# variables:
+#   FIRST: lalu
+#   SECOND: balu
+
+# before_script:
+#   - echo $FIRST
+#   - echo $SECOND
+
+# build:
+#   stage: build
+#   script:
+#     - echo "Building project"
+
+# test:
+#   stage: test
+#   script:
+#     - echo "Testing project"
+
+# release:
+#   stage: release
+#   script:
+#     - echo "Releasing project"
+
+# deploy:
+#   stage: deploy
+#   script:
+#     - echo "Deploying project"
+
 image: docker:latest
 
 services:
   - name: docker:dind
-    command: ["--host=unix///var/run/docker.sock"]
+    command: ["--host=unix:///var/run/docker.sock"]
 
 stages:
   - build
   - test
-  - release
   - deploy
 
 variables:
-  FIRST: lalu
-  SECOND: balu
+  CONTAINER_IMAGE: discord-clone:latest
+  KUBE_CONTEXT: minikube
 
 before_script:
-  - echo $FIRST
-  - echo $SECOND
+  - echo "Logging into Docker..."
+  - docker login -u vishnu0609 -p Vishnu@06092004
 
 build:
   stage: build
   script:
-    - echo "Building project"
+    - echo "Building Docker image..."
+    - docker build -t $CONTAINER_IMAGE .
+    - echo "Pushing Docker image to registry..."
+    - docker push $CONTAINER_IMAGE
 
 test:
   stage: test
   script:
-    - echo "Testing project"
-
-release:
-  stage: release
-  script:
-    - echo "Releasing project"
+    - echo "Running tests..."
+    # - docker run --rm $CONTAINER_IMAGE npm test
 
 deploy:
   stage: deploy
   script:
-    - echo "Deploying project"
+    - echo "Starting Minikube..."
+    - minikube start --vm-driver=docker
+    - echo "Setting Kubernetes context..."
+    - kubectl config use-context $KUBE_CONTEXT
+    - echo "Deploying to Kubernetes..."
+    - kubectl apply -f kubernetes/deployment.yaml
+    - kubectl apply -f kubernetes/service.yaml
+    - echo "Deployment complete!"
+    - echo "Current Pods:"
+    - kubectl get pods
+    - echo "Current Services:"
+    - kubectl get services
