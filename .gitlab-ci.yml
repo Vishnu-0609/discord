@@ -11,7 +11,7 @@ stages:
   - deploy
 
 variables:
-  TEST_IMAGE: $HOST/$IMAGE_NAME-test:$TAG
+  TEST_IMAGE: $HOST/$IMAGE_NAME:test
   FINAL_IMAGE: $HOST/$IMAGE_NAME:$TAG
 
 before_script:
