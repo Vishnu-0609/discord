@@ -1,0 +1,39 @@
+image: docker:latest
+
+services:
+  - name: docker:dind
+    command: ["--host=unix///var/run/docker.sock"]
+
+stages:
+  - build
+  - test
+  - release
+  - deploy
+
+variables:
+  FIRST: lalu
+  SECOND: balu
+
+before_script:
+  - echo $FIRST
+  - echo $SECOND
+
+build:
+  stage: build
+  script:
+    - echo "Building project"
+
+test:
+  stage: test
+  script:
+    - echo "Testing project"
+
+release:
+  stage: release
+  script:
+    - echo "Releasing project"
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying project"
