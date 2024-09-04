@@ -11,12 +11,11 @@ stages:
   - deploy
 
 variables:
-  TEST_IMAGE: $HOST/$IMAGE_NAME:$TAG
+  TEST_IMAGE: $HOST/$IMAGE_NAME-test:$TAG
   FINAL_IMAGE: $HOST/$IMAGE_NAME:$TAG
 
 before_script:
   - echo "Logging into Docker..."
-  # - docker login -u vishnu0609 -p Vishnu@06092004
   - docker login -u $HOST -p $PASSWORD
 
 build:
@@ -33,7 +32,6 @@ test:
     - echo "Running tests..."
     - docker pull $TEST_IMAGE
     - docker run -d $TEST_IMAGE npm test
-    # - docker run --rm $CONTAINER_IMAGE npm test
 
 release:
   stage: release
