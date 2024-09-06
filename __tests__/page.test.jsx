@@ -18,7 +18,3 @@ describe("Exit page testing",()=>{
         expect(ele).toBeInTheDocument();
     })
 })
-
-test("example",()=>{
-    expect(2+4).toEqual(5);
-})
