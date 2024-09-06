@@ -1,9 +1,10 @@
 import React from 'react'
 
-function page() {
+function page({testing=false}) {
+  if(!testing)
     process.exit(0);
   return (
-    <div>Page 1</div>
+    <div data-testid="crash-route">Page 1</div>
   )
 }
 
