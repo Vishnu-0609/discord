@@ -10,10 +10,15 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 import {NavigationAction} from "./navigation-action";
 import { NavigationItem } from "./navigation-item";
+import Image from "next/image";
+import imageurl from "../../public/ai.png"
+import { ActionTooltip } from "../action-tooltip";
+import Link from 'next/link';
 
 export const NavigationSideBar = async () => {
 
   const profile = await currentProfile();
+  let serverId;
 
   if (!profile) {
     return redirect("/");
@@ -38,17 +43,24 @@ export const NavigationSideBar = async () => {
         className="h-[2px] bg-zinc-300 dark:bg-zinc-700 rounded-md w-10 mx-auto"
       />
       <ScrollArea className="flex-1 w-full">
-        {servers.map((server) => (
-            <div key={server.id} className="mb-4">
+        {servers.map((server) => {
+            serverId=server.id;
+            return <div key={server.id} className="mb-4">
+                
                 <NavigationItem 
                     id={server.id}
                     imageUrl={server.imageUrl}
                     name={server.name}
                  />
             </div>
-        ))}
+      })}
       </ScrollArea>
       <div className="pb-3 mt-auto flex items-center flex-col gap-y-4">
+        <ActionTooltip side='right' align='center' label='Meta AI'>
+          <Link href={`/servers/${serverId}/conversations`}>
+            <Image src={imageurl} alt='Meta AI' width={30} className='object-cover' />
+          </Link>
+        </ActionTooltip>
         <ModeToggle />
         <UserButton 
             afterSignOutUrl="/"

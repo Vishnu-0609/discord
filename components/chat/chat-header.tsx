@@ -5,6 +5,8 @@ import { UserAvatar } from "@/components/user-avatar";
 import { SocketIndicator } from "@/components/socket-indicator";
 
 import { ChatVideoButton } from "./chat-video-button";
+import imagepath from "../../public/ai.png";
+import Image from "next/image";
 
 interface ChatHeaderProps {
   serverId: string;
@@ -15,7 +17,7 @@ interface ChatHeaderProps {
 
 export const ChatHeader = ({
   serverId,
-  name,
+  name="Meta AI",
   type,
   imageUrl,
 }: ChatHeaderProps) => {
@@ -25,11 +27,14 @@ export const ChatHeader = ({
       {type === "channel" && (
           <Hash className="w-5 h-5 text-zinc-500 dark:text-zinc-400 mr-2 " />
       )}
-      {type === "conversation" && (
+      {type === "conversation" && name!=="Meta AI" && (
         <UserAvatar 
           src={imageUrl}
           className="h-8 w-8 md:h-8 md:w-8 mr-2"
         />
+      )}
+      {type === "conversation" && name==="Meta AI" && (
+        <Image src={imagepath} alt='Meta AI' width={30} className='h-6 w-6 md:h-6 md:w-6 mr-2' />
       )}
       <p className="font-semibold text-md text-black dark:text-white">
         {name}

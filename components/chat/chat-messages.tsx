@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef, ElementRef } from "react";
+import { Fragment, useRef, ElementRef, useEffect } from "react";
 import { format } from "date-fns";
 import { Member, Message, Profile } from "@prisma/client";
 import { Loader2, ServerCrash } from "lucide-react";
@@ -8,6 +8,7 @@ import { Loader2, ServerCrash } from "lucide-react";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { useChatSocket } from "@/hooks/use-chat-socket";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
+import naughtyWords from "naughty-words";
 
 import { ChatWelcome } from "./chat-welcome";
 import { ChatItem } from "./chat-item";
@@ -49,6 +50,10 @@ export const ChatMessages = ({
 
   const chatRef = useRef<ElementRef<"div">>(null);
   const bottomRef = useRef<ElementRef<"div">>(null);
+
+  // useEffect(()=>{
+  //   console.log(naughtyWords);
+  // },[naughtyWords])
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
@@ -114,8 +119,26 @@ export const ChatMessages = ({
       <div className='flex flex-col-reverse mt-auto '>
         {data?.pages?.map((group, i) => (
           <Fragment key={i}>
-            {group.items.map((message: MessageWithMemberWithProfile) => (
-              <ChatItem
+            {group.items.map((message: MessageWithMemberWithProfile) => {
+              let count = 0;
+              for(let key in naughtyWords)
+              {
+                const messagel = message.content.split(" ");
+                for(let word of messagel)
+                {
+                    if(naughtyWords[key].includes(word))
+                    {
+                        count++;
+                    }
+                }
+              }
+
+              if(count>0)
+              {
+                message.content = '*'.repeat(message.content.length);
+              }
+
+              return <ChatItem
                 key={message.id}
                 id={message.id}
                 currentMember={member}
@@ -128,7 +151,7 @@ export const ChatMessages = ({
                 socketUrl={socketUrl}
                 socketQuery={socketQuery}
               />
-            ))}
+          })}
           </Fragment>
         ))}
       </div>
